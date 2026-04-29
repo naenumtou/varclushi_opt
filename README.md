@@ -1,5 +1,27 @@
 
-# VarClusHi
+# 🙏 Thank you for "jingtt" who made the incredible library
+This library is inspired by the ideas and approaches of **jingtt** The purpose of this project is **not** to compete with or replace jingtt, but to **learn from it, experiment, and explore improvements** in areas such as usability, code structure, extensibility and performance (where mainly focus).
+
+## Acknowledgement
+
+Credit and respect go to **jingtt** for the original inspiration. This project would not exist without the ideas and prior work from that library.
+> This is an independent project and is **not affiliated with, endorsed by, or maintained by** the jingtt authors.
+
+## Contributions
+Contributions, discussions, and suggestions are welcome. If you like jingtt and want to help explore new directions, feel free to join!
+
+# VarClusHi Optimization
+## 🎯 Project Goals
+- Reimplement core ideas in a clean, Pythonic way
+- Experiment with alternative design choices
+- Make the library easier to extend and customize
+- Learn and share knowledge with the community
+
+# 🚧 Status
+...Developing...
+
+
+
 
 This is a Python module to perform variable clustering (varclus) with a hierarchical structure. Varclus is a nice dimension reduction algorithm. Here is a short description:
 
@@ -18,14 +40,6 @@ This is a Python module to perform variable clustering (varclus) with a hierarch
 
 
 # Example
-
-
- 
-
-
-
-
-
 ## See [demo.ipynb](https://github.com/jingtt/varclushi/blob/master/demo.ipynb) for more details.
 
 
@@ -96,10 +110,5 @@ demo1_vc.rsquare
 ```
 pip install varclushi
 ```
-
-# Other Comments:
-- The parameters controlling this algorithm only include second eigenvalues and max number of clusters. I do not develop other functions because it is enough for my use. If you have a need for more flexibility, you can reach out to me via xuanjing@hotmail.com.
-
-- Comments for source code will be added once I have time.
 
 
