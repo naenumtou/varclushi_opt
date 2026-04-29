@@ -1,4 +1,8 @@
 
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&style=for-the-badge)
+![Pandas](https://img.shields.io/badge/pandas-Data%20Analysis-purple?logo=pandas&style=for-the-badge)
+![NumPy](https://img.shields.io/badge/NumPy-Numerical-green?logo=numpy&style=for-the-badge)
+
 # 🙏 Thank you for "jingtt" who made the incredible library
 This library is inspired by the ideas and approaches of **jingtt** The purpose of this project is **not** to compete with or replace jingtt, but to **learn from it, experiment, and explore improvements** in areas such as usability, code structure, extensibility and performance (where mainly focus).
 
