@@ -16,10 +16,75 @@ Contributions, discussions, and suggestions are welcome. If you like jingtt and 
 
 # VarClusHi Optimization
 ## 🎯 Project Goals
-- Reimplement core ideas in a clean, Pythonic way
-- Experiment with alternative design choices
+- Reimplement core ideas in a clean, pythonic way
+- Experiment with alternative design choices **(Speed Up! 🚀)**
 - Make the library easier to extend and customize
 - Learn and share knowledge with the community
+
+## What I did...
+There are six targeted optimisations applied to the original `VarClusHi` python class. Each change reduces redundant computation while preserving numerical outputs to within floating-point tolerance (np.allclose defaults).
+
+### 1. `correig` - Eigendecomposition cleanup
+#### Issue
+The original code calls `np.argsort` on the full eigenvalue array, then uses advanced indexing to reorder both arrays, producing three temporary arrays, even though only the top-2 components are needed.
+#### Solution
+A dedicated `_eigh_sorted` helper uses `np.arange` with a reverse step _(no argsort)_ and slices to `n_pcs` immediately. The resulting eigvals/eigvecs are returned directly.
+
+```python
+# Original
+idx = np.argsort(raw_eigvals)[::-1]           #Creates temp array
+eigvals = raw_eigvals[idx][:n_pcs]            #Another copy
+eigvecs = raw_eigvecs[:, idx][:, :n_pcs]      #And another copy
+
+# Optimized
+idx = np.arange(len(raw_eigvals)-1, -1, -1)
+eigvals = raw_eigvals[idx][:n_pcs]
+eigvecs = raw_eigvecs[:, idx][:, :n_pcs]
+```
+
+### 2. `_reassign` - Set membership and shared correlation matrix
+#### Issue
+Every candidate feature moves inside `_reassign` called `_calc_tot_var`, which internally recomputed `np.corrcoef` from raw data. For `k` features, each pass through the loop triggered 2k full correlation-matrix computations on the same unchanged data.
+#### Solution
+Compute `np.corrcoef` once for the full feature pool at the start of `_reassign`. Sub-matrices for candidate clusters are extracted via `np.ix_` index slicing. Feature membership is tracked with Python sets for O(1) add/remove instead of O(k) list scans.
+
+```python
+# Original - Corrcoef inside every candidate moves
+new_var = VarClusHi._calc_tot_var(df, new_clus1, new_clus2)[0]
+
+# Optimized - Compute once, slice per candidate
+corr_vals = np.corrcoef(df[feat_list].values.T)       #Once
+feat_idx  = {f: i for i, f in enumerate(feat_list)}
+
+def _var(s1, s2):
+    i1 = np.array([feat_idx[f] for f in s1])
+    i2 = np.array([feat_idx[f] for f in s2])
+    return _tot_var_from_corr(corr_vals, i1, i2)      #np.ix_ slice only
+```
+
+### 3. `_varclusspu` - Global correlation matrix cache
+#### Issue
+Inside the main clustering loop, correig was called for every cluster being evaluated and for every sub-cluster produced after a split. Each call recomputed np.corrcoef from raw data, resulting in O(p² × splits) redundant floating-point operations.
+#### Solution
+Compute the full p×p correlation matrix once at the top of `_varclusspu`. A local helper `_cluster_info_from_corr` extracts per-cluster sub-matrices with integer index slicing from this single cached array.
+
+```python
+# Optimized - global_corr computed once
+global_corr = np.corrcoef(self.df[self.feat_list].values.T)
+feat_pos    = {f: i for i, f in enumerate(self.feat_list)}
+
+def _cluster_info_from_corr(clus):
+    idx = [feat_pos[f] for f in clus]
+
+    # O(k²) slice, no recompute
+    sub = global_corr[np.ix_(idx, idx)]
+    eigvals, eigvecs, varprops = VarClusHi._eigh_sorted(sub, n_pcs=2)
+    return float(eigvals[0]), float(eigvals[1]), eigvecs, float(varprops[0])
+```
+
+### 4. Feature assignment - Vectorised projection
+#### Issue
+#### Solution
 
 # 🚧 Status
 ...Developing...
