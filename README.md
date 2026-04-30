@@ -105,7 +105,71 @@ def _cluster_info_from_corr(clus):
 
 ### 4. Feature assignment - Vectorised projection
 #### Issue
+Assigning each feature to a cluster required computing `np.dot` separately per feature inside a python iteration `n` individual dot products for `n` features in a split cluster.
 #### Solution
+Replace the per-feature loop with a single matrix–vector multiplication. With multiplying the sub-correlation matrix by the rotated eigenvector once to obtain projection scores for all features simultaneously. Assignment becomes a vectorised boolean comparison.
+
+```python
+# Original - Python loop, one np.dot per feature
+for feat in split_clus:
+    cov1 = np.dot(r_eigvecs[:, 0], split_corrs[feat].values.T)
+    cov2 = np.dot(r_eigvecs[:, 1], split_corrs[feat].values.T)
+    corr_pc1 = cov1 / sigma1
+    ...
+
+# Optimized - Single matmul, all features at once
+cov1 = split_corr @ re0 #shape (n_split,)
+cov2 = split_corr @ re1
+corr_pc1 = cov1 / sigma1
+corr_pc2 = cov2 / sigma2
+clus1 = [f for f,c1,c2 in zip(split_clus,corr_pc1,corr_pc2) if abs(c1)>=abs(c2)]
+```
+
+### 5. `info` Table - Avoid quadratic DataFrame growth  
+#### Issue
+The original info property appended rows one by one using `df.loc[n_row]`. Each pandas assignment copies the entire internal block array, making this O(n²) in memory allocations for n clusters.
+#### Solution
+Collect all rows in a plain python list, then call `pd.DataFrame()` once at the end. This is the canonical pandas best practice for building DataFrames iteratively.
+
+```python
+# Original - O(n²) repeated internal copy
+info_table = pd.DataFrame(columns=cols)
+for i, clusinfo in self.clusters.items():
+    info_table.loc[n_row] = row #Copies entire df each time
+
+
+# Optimized - O(n) single construction
+rows = [
+    [repr(i), repr(len(ci.clus)), ci.eigval1, ci.eigval2, ci.varprop]
+    for i, ci in self.clusters.items()
+]
+return pd.DataFrame(
+    rows,
+columns = ['Cluster','N_Vars','Eigval1','Eigval2','VarProp']
+)
+```
+
+### 6. `rsquare` — Vectorised R-Square matrix  
+#### Issue
+Both rsquare paths computed R² of each variable against each cluster PC using individual np.corrcoef calls inside nested loops O(n_vars × n_clusters) corrcoef invocations total.
+#### Solution
+Build a proj matrix of shape (n_clusters, n_features) in one pass for each cluster k, multiply the cached global correlation row by the cluster's PC1 eigenvector. Squaring yields all R² values at once. `RS_NC` is a masked row-max on this matrix.
+
+```python
+# Optimized - Full R-Square matrix in one vectorised pass
+proj = np.empty((n_clus, n_feat))
+for k, (_, ci) in enumerate(clus_items):
+    c_idx = np.array([feat_pos[f] for f in ci.clus])
+    v = ci.eigvecs[:, 0]
+    sub = global_corr[np.ix_(c_idx, c_idx)]
+    sigmas[k] = math.sqrt(v @ sub @ v)
+    proj[k] = (v @ global_corr[c_idx, :]) / sigmas[k]
+
+rs_matrix = proj ** 2                    #(n_clus, n_feat) —-> all R² at once
+rs_nc = rs_matrix[other_mask, fi].max()  #RS_NC via masked row-max
+```
+
+### Summary
 
 # 🚧 Status
 ...Developing...
