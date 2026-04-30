@@ -15,13 +15,34 @@ Credit and respect go to **jingtt** for the original inspiration. This project w
 Contributions, discussions, and suggestions are welcome. If you like jingtt and want to help explore new directions, feel free to join!
 
 # VarClusHi Optimization
+## ✏️ Short recap
+This module implements the Variable Clustering (VarClus), a hierarchical dimension‑reduction algorithm that groups variables based on shared variance rather than observations.
+
+VarClus works by iteratively splitting clusters. A selected cluster is decomposed using the first two principal components, followed by an orthoblique rotation. Variables are assigned to the component with which they have the highest squared correlation. An iterative reassignment step then refines cluster membership to maximize variance explained by each cluster component.
+
+The result is an interpretable hierarchical clustering of variables, useful for multicollinearity reduction, feature selection, and exploratory data analysis.
+
+Key features
+- Hierarchical variable clustering
+- PCA-based splits with orthoblique rotation
+- Iterative reassignment to maximize explained variance
+- Interpretable alternative to standard dimensionality reduction techniques
+
+### For who?
+- Analysts familiar with `PROC VARCLUS` in SAS Software: If you have used the `PROC VARCLUS` procedure before but struggled to find a correct and reliable Python implementation, this module is designed for you.
+- Python users new to the `PROC VARCLUS` algorithm: The well-documented source code is intended to be educational, helping you build a deep understanding of the mathematics and logic behind variable clustering.
+
+
+
+
+
 ## 🎯 Project Goals
 - Reimplement core ideas in a clean, pythonic way
 - Experiment with alternative design choices **(Speed Up! 🚀)**
 - Make the library easier to extend and customize
 - Learn and share knowledge with the community
 
-## What I did...
+## 👉 What I did...
 There are six targeted optimisations applied to the original `VarClusHi` python class. Each change reduces redundant computation while preserving numerical outputs to within floating-point tolerance (np.allclose defaults).
 
 ### 1. `correig` - Eigendecomposition cleanup
@@ -89,14 +110,6 @@ def _cluster_info_from_corr(clus):
 # 🚧 Status
 ...Developing...
 
-
-
-
-This is a Python module to perform variable clustering (varclus) with a hierarchical structure. Varclus is a nice dimension reduction algorithm. Here is a short description:
-
-1. A cluster is chosen for splitting.
-2. The chosen cluster is split into two clusters by finding the first two principal components, performing an orthoblique rotation, and assigning each variable to the rotated component with which it has the higher squared correlation.
-3. Variables are iteratively reassigned to clusters to maximize the variance accounted for by the cluster components.
 
 
 ## Indented Audience:
