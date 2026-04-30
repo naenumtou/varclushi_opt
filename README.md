@@ -15,7 +15,7 @@ Credit and respect go to **jingtt** for the original inspiration. This project w
 Contributions, discussions, and suggestions are welcome. If you like jingtt and want to help explore new directions, feel free to join!
 
 # VarClusHi Optimization
-## ✏️ Short recap
+## ✏️ Short Recap
 This module implements the Variable Clustering (VarClus), a hierarchical dimension‑reduction algorithm that groups variables based on shared variance rather than observations.
 
 VarClus works by iteratively splitting clusters. A selected cluster is decomposed using the first two principal components, followed by an orthoblique rotation. Variables are assigned to the component with which they have the highest squared correlation. An iterative reassignment step then refines cluster membership to maximize variance explained by each cluster component.
@@ -179,7 +179,40 @@ rs_nc = rs_matrix[other_mask, fi].max()  #RS_NC via masked row-max
 | info | O(n²) df.loc append | O(n) list + constructor | pandas best practice |
 | rsquare | O(v·c) corrcoef calls | O(c·p) matmul + index | Single matrix pass |
 
-# ⚡ Performance
+# Testing and Performance
+## ✔️ Testing on Calculation Logic
+After optimization coded, re-running to test the calcualtion logic by the same dataset. See dataset - [winequality-red.csv](https://github.com/naenumtou/varclushi_opt/blob/master/data/winequality-red.csv). The result is shown below:
+
+```python
+  Cluster N_Vars   Eigval1   Eigval2   VarProp
+0       0      3  2.141357  0.658413  0.713786
+1       1      3  1.766885  0.900991  0.588962
+2       2      2  1.371260  0.628740  0.685630
+3       3      2  1.552496  0.447504  0.776248
+4       4      1  1.000000  0.000000  1.000000
+```
+Running the test script between 2 outputs resulting from original and optimized verseions. The result is shown below:
+
+ ```python
+────────────────────────────────────────────────────────────
+  CORRECTNESS CHECK
+────────────────────────────────────────────────────────────
+  ✓ PASS  N clusters match
+  ✓ PASS  N_Vars match
+  ✓ PASS  Eigval1 close
+  ✓ PASS  Eigval2 close
+  ✓ PASS  RS_Own close
+  ✓ PASS  RS_NC close
+  ✓ PASS  RS_Ratio close
+
+  All checks passed — outputs are numerically identical.
+
+DONE
+```
+
+## 🕙 Performance on running times
+
+
 ...Developing...
 
 
@@ -215,37 +248,6 @@ Call info, you can get the number of clusters, number of variables in each clust
 ```python
 demo1_vc.info
 ```
-```python
-  Cluster N_Vars   Eigval1   Eigval2   VarProp
-0       0      3  2.141357  0.658413  0.713786
-1       1      3  1.766885  0.900991  0.588962
-2       2      2  1.371260  0.628740  0.685630
-3       3      2  1.552496  0.447504  0.776248
-4       4      1  1.000000  0.000000  1.000000
-```
-
-Call rsquare, you can get the (1 - rsquare) ratio of each variable
-
-```python
-demo1_vc.rsquare
-```
-
-```python
-   Cluster              Variable    RS_Own     RS_NC  RS_Ratio
-0        0         fixed acidity  0.882210  0.277256  0.162976
-1        0               density  0.622070  0.246194  0.501362
-2        0                    pH  0.637076  0.194359  0.450478
-3        1   free sulfur dioxide  0.777796  0.010358  0.224530
-4        1  total sulfur dioxide  0.786660  0.042294  0.222761
-5        1        residual sugar  0.202428  0.045424  0.835525
-6        2             sulphates  0.685630  0.106022  0.351653
-7        2             chlorides  0.685630  0.048903  0.330534
-8        3           citric acid  0.776248  0.398208  0.371810
-9        3      volatile acidity  0.776248  0.040920  0.233299
-10       4               alcohol  1.000000  0.082055  0.000000
-```
-
-
 
 # Installation
 
