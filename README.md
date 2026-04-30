@@ -181,7 +181,7 @@ rs_nc = rs_matrix[other_mask, fi].max()  #RS_NC via masked row-max
 
 # Testing and Performance
 ## ✔️ Testing on Calculation Logic
-After optimization coded, re-running to test the calcualtion logic by the same dataset. See dataset - [winequality-red.csv](https://github.com/naenumtou/varclushi_opt/blob/master/data/winequality-red.csv). The result is shown below:
+After optimization coded, re-running to test the calcualtion logic by the same demo dataset. See dataset - [winequality-red.csv](https://github.com/naenumtou/varclushi_opt/blob/master/data/winequality-red.csv). The result is shown below:
 
 ```python
   Cluster N_Vars   Eigval1   Eigval2   VarProp
@@ -211,10 +211,18 @@ DONE
 ```
 
 ## 🕙 Performance on running times
+Re-running the code on the same demo dataset 100 times resulted in an approximately **4.x** speedup.
 
-
+ ```python
 ...Developing...
+```
 
+For a larger dataset with 20k rows and 200 features (capped at this size due to excessive runtime in the original version), resulted in an approximately **x.x** speedup.
+
+ ```python
+...Developing...
+```
+...Developing...
 
 
 
