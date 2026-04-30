@@ -226,9 +226,8 @@ For a larger dataset with 20k rows and 200 features (capped at this size due to 
 
 
 
-# Example
+# Example (Usage is fully compatible with original version.)
 ## See [demo.ipynb](https://github.com/jingtt/varclushi/blob/master/demo.ipynb) for more details.
-
 
 ```python
 import pandas as pd
@@ -248,9 +247,7 @@ demo1_df.drop('quality',axis=1,inplace=True)
 demo1_vc = VarClusHi(demo1_df,maxeigval2=1,maxclus=None)
 demo1_vc.varclus()
 ```
-```
-<varclushi.varclushi.VarClusHi at 0x15f96e35e10>
-```
+
 Call info, you can get the number of clusters, number of variables in each cluster (N_vars), variance explained by each cluster (Eigval1), etc.
 
 ```python
