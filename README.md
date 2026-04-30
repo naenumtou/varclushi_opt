@@ -170,8 +170,16 @@ rs_nc = rs_matrix[other_mask, fi].max()  #RS_NC via masked row-max
 ```
 
 ### Summary
+| Function | Before | After | Impact |
+|----------|----------|----------|----------|
+| correig | O(p²) + argsort overhead | O(p²), no argsort  | Constant factor reduction |
+| _reassign (inner) | O(k²) corrcoef per move | O(k²) matrix slice only | No recomputation |
+| _varclusspu (corr) | O(p²) per cluster eval | O(k²) slice from cache | p² computed once total |
+| Feature assignment | O(k) dot loop | O(k) single matmul | BLAS-level throughput |
+| info | O(n²) df.loc append | O(n) list + constructor | pandas best practice |
+| rsquare | O(v·c) corrcoef calls | O(c·p) matmul + index | Single matrix pass |
 
-# 🚧 Status
+# ⚡ Performance
 ...Developing...
 
 
