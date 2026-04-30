@@ -112,14 +112,6 @@ def _cluster_info_from_corr(clus):
 
 
 
-## Indented Audience:
-- Those who are familar with the usage of varclus algorithm in other analytical software like SAS, but always feel distressed when trying to find a RIGHT python module.
-- Pythoners who are new to varclus algorithm. The source code could help you gain a deep understanding of the math behind this algorithm.
-
-## INSIGHTS & HIGHLIGHTS:
-- (this is a pure theoretical part, ignore this bullet point does not affect the usage of VarClusHi package) Existing literatures always mention we need principal components (refer step 2-3 above). Actually, implementing this algorithm DOES NOT require principle components to be calulated, correlation matrix and its eigenvectors are enough to get the squared correlation between component and variable (this can be proved by math). If our dataset has millions of observations and hundreds of variables, not using principal components will save time and memory.
-- Python package VarClusHi can produce very similar results, if we use SAS VARCLUS Procedure as a benchmark. This gurantees the correctness of the code. :)
-
 
 # Example
 ## See [demo.ipynb](https://github.com/jingtt/varclushi/blob/master/demo.ipynb) for more details.
