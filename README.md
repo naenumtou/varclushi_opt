@@ -364,36 +364,28 @@ For a larger dataset with scaling by **sizing 50,000, 500,000 and 1,000,000 rows
 <img width="989" height="590" alt="ใช้ Python ทำ proc varclus เหมือนบน SAS ได้แล้วนะ" src="https://github.com/user-attachments/assets/4ae13739-cfdf-406f-91a3-76c2495bbe76" />
 </p>
 
-
-
-
-
 # Example (Usage is fully compatible with original version.)
-## See [demo.ipynb](https://github.com/jingtt/varclushi/blob/master/demo.ipynb) for more details.
+## See [demo.ipynb]([https://github.com/jingtt/varclushi/blob/master/demo.ipynb](https://github.com/naenumtou/varclushi_opt/blob/master/notebooks/01_performance_testing.ipynb)) for more details.
 
 ```python
 import pandas as pd
-from varclushi import VarClusHi
+from varclushi import VarClusHi_Opt
 ```
 
-Create a VarClusHi object and pass the dataframe (df) to be analyzed as a parameter, you can also specify 
+Create a VarClusHi_Opt object and pass the dataframe (df) to be analyzed as a parameter, you can also specify 
 - a feature list (feat_list, default all columns of df)
 - max second eigenvalue (maxeigval2, default 1)
 - max clusters (maxclus, default None)
 
-Then call method varclus(), which performs hierachical variable clustering algorithm
+Then, call method `varclus()`, which performs hierachical variable clustering algorithm.
 
 ```python
-demo1_df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv', sep=';')
-demo1_df.drop('quality',axis=1,inplace=True)
-demo1_vc = VarClusHi(demo1_df,maxeigval2=1,maxclus=None)
-demo1_vc.varclus()
-```
-
-Call info, you can get the number of clusters, number of variables in each cluster (N_vars), variance explained by each cluster (Eigval1), etc.
-
-```python
-demo1_vc.info
+demo_df = pd.read_csv('https://raw.githubusercontent.com/naenumtou/varclushi_opt/refs/heads/master/data/winequality-red.csv')
+demo_df = demo_df.drop('quality', axis = 1)
+demo_vc = VarClusHi_Opt(demo_df)
+demo_vc.varclus()
+print(demo_vc.info)
+print(demo_vc.rsquare)
 ```
 
 # Installation
