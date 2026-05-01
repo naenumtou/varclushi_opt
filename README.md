@@ -342,7 +342,29 @@ Optimized   1.4380  0.6753   0.8294   2.3690
 <img width="842" height="547" alt="ใช้ Python ทำ proc varclus เหมือนบน SAS ได้แล้วนะ" src="https://github.com/user-attachments/assets/da14eb9b-49c9-4158-bd38-04955803b5ff" />
 </p>
 
-...Developing...
+For a larger dataset with scaling by **sizing 50,000, 500,000 and 1,000,000 rows and 100, 150 and 200 features for 5 times**. The result is shown below:
+
+```python
+────────────────────────────────────────────────────────────
+  SUMMARY
+────────────────────────────────────────────────────────────
+  n_obs  n_var    mean     std     min     max
+  50000    100  0.1914  0.0101  0.1732  0.2020
+  50000    150  0.9047  0.3507  0.3682  1.4711
+  50000    200  1.5565  0.4828  0.8359  2.3473
+ 500000    100  1.4523  0.1825  1.2335  1.6914
+ 500000    150  3.1839  0.1799  2.8887  3.4096
+ 500000    200 14.6079 14.5148  5.8391 43.4754
+1000000    100  3.1791  0.1345  2.9873  3.3308
+1000000    150 46.2291  4.1337 39.5784 52.1834
+1000000    200 21.8285 18.6833  6.5975 52.7565
+```
+
+<p align="center">
+<img width="989" height="590" alt="ใช้ Python ทำ proc varclus เหมือนบน SAS ได้แล้วนะ" src="https://github.com/user-attachments/assets/4ae13739-cfdf-406f-91a3-76c2495bbe76" />
+</p>
+
+
 
 
 
