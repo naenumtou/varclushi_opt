@@ -257,7 +257,25 @@ To compare the profiling results between the Original and Optimized implementati
       13    0.000    0.000    0.000  __new__
        6    0.000    0.000    0.000  <genexpr>
 ```
+Significant reduction in import‑related overhead. The function _handle_fromlist shows a drastic drop in call count:
+- Original: 3,266 calls
+- Optimized: 18 calls
 
+This strongly indicates that the optimized version eliminates repeated module import resolution, which is a common hidden performance cost in Python.
+
+Context manager and filter calls remain stable. Functions such as:
+- `simplefilter`
+- `__enter__` / `__exit__`
+- `_get_context`
+
+Showing similar call counts between versions:
+| Function | Original | Optimized |
+| --- | --- | --- |
+| `simplefilter` | 218 | 222 |
+| `__enter__` | 654 | 666 |
+| `__exit__` | 654 | 666 |
+
+This suggests that the core logical behavior is unchanged and the pptimization did not introduce unnecessary control‑flow overhead.
 
 ### Running times
 Re-running the code on the same demo dataset **200 times** resulted in an approximately **~4.x** speedup.
