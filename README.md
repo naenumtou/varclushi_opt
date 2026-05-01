@@ -389,13 +389,6 @@ print(demo_vc.rsquare)
 ```
 
 # Installation
-
-- Requirements: Python 3.4+
-
-- Install by pip:
-
+```python
+pip install varclushi-opt
 ```
-pip install varclushi
-```
-
-
