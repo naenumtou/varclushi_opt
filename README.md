@@ -180,7 +180,7 @@ rs_nc = rs_matrix[other_mask, fi].max()  #RS_NC via masked row-max
 | rsquare | O(v·c) corrcoef calls | O(c·p) matmul + index | Single matrix pass |
 
 # Testing and Performance
-## ✔️ Testing on Calculation Logic
+## ✔️ Testing
 After optimization coded, re-running to test the calcualtion logic by the same demo dataset. See dataset - [winequality-red.csv](https://github.com/naenumtou/varclushi_opt/blob/master/data/winequality-red.csv). The result is shown below:
 
 ```python
@@ -210,18 +210,120 @@ Running the test script between 2 outputs resulting from original and optimized 
 DONE
 ```
 
-## 🕙 Performance on running times
-Re-running the code on the same demo dataset 100 times resulted in an approximately **4.x** speedup.
+## 🕙 Performance
+### cProfile Performance Comparison
+To compare the profiling results between the Original and Optimized implementations using cProfile, focusing on call frequency and cumulative execution cost.
 
  ```python
-...Developing...
+────────────────────────────────────────────────────────────
+  cPROFILE — Original
+────────────────────────────────────────────────────────────
+  ncalls  tottime  percall  cumtime  function
+    3266    0.004    0.000    0.006  _handle_fromlist
+     218    0.000    0.000    0.001  simplefilter
+      13    0.000    0.000    0.000  __call__
+       4    0.000    0.000    0.000  dumps
+       1    0.000    0.000    0.000  __subclasscheck__
+     654    0.000    0.000    0.000  __enter__
+     654    0.000    0.000    0.000  __exit__
+       2    0.000    0.000    0.000  _type_convert
+     218    0.000    0.000    0.000  _get_context
+     218    0.000    0.000    0.001  __enter__
+     218    0.000    0.000    0.000  __exit__
+       1    0.000    0.000    0.000  namedtuple
+       1    0.000    0.000    0.000  __exit__
+      13    0.000    0.000    0.000  __new__
+       6    0.000    0.000    0.000  <genexpr>
 ```
-
-For a larger dataset with 20k rows and 200 features (capped at this size due to excessive runtime in the original version), resulted in an approximately **x.x** speedup.
 
  ```python
-...Developing...
+────────────────────────────────────────────────────────────
+  cPROFILE — Optimized
+────────────────────────────────────────────────────────────
+  ncalls  tottime  percall  cumtime  function
+      18    0.000    0.000    0.000  _handle_fromlist
+     222    0.000    0.000    0.001  simplefilter
+      13    0.000    0.000    0.000  __call__
+       4    0.000    0.000    0.000  dumps
+       1    0.000    0.000    0.000  __subclasscheck__
+     666    0.000    0.000    0.000  __enter__
+     666    0.000    0.000    0.000  __exit__
+       2    0.000    0.000    0.000  _type_convert
+     222    0.000    0.000    0.000  _get_context
+     222    0.000    0.000    0.001  __enter__
+     222    0.000    0.000    0.001  __exit__
+       1    0.000    0.000    0.000  namedtuple
+       1    0.000    0.000    0.000  __exit__
+      13    0.000    0.000    0.000  __new__
+       6    0.000    0.000    0.000  <genexpr>
 ```
+
+
+### Running times
+Re-running the code on the same demo dataset **200 times** resulted in an approximately **~4.x** speedup.
+
+ ```python
+────────────────────────────────────────────────────────────
+  TIMING BENCHMARK BY RUN 200 TIMES
+────────────────────────────────────────────────────────────
+
+▶ Original
+  mean       0.0533s ± 0.0059s          
+  min        0.0469s
+  max        0.1093s
+
+▶ Optimized
+  mean       0.0141s ± 0.0012s          
+  min        0.0122s
+  max        0.0209s
+
+────────────────────────────────────────────────────────────
+  SUMMARY
+────────────────────────────────────────────────────────────
+          Mean (s) Std (s) Min (s) Max (s)
+Version                                   
+Original    0.0533  0.0059  0.0469  0.1093
+Optimized   0.0141  0.0012  0.0122  0.0209
+
+  Speedup: 3.79x
+```
+
+<p align="center">
+<img width="855" height="547" alt="ใช้ Python ทำ proc varclus เหมือนบน SAS ได้แล้วนะ" src="https://github.com/user-attachments/assets/858db566-cccc-447f-9643-f72f2291103d" />
+</p>
+
+For a larger dataset with **20k rows and 200 features for 5 times** (capped at this size due to excessive runtime in the original version), resulted in an approximately **~10.x** speedup.
+
+ ```python
+────────────────────────────────────────────────────────────
+  TIMING BENCHMARK BY RUN 5 TIMES
+────────────────────────────────────────────────────────────
+
+▶ Original
+  mean       14.8464s ± 0.9600s         
+  min        13.5937s
+  max        16.4938s
+
+▶ Optimized
+  mean       1.4380s ± 0.6753s          
+  min        0.8294s
+  max        2.3690s
+
+────────────────────────────────────────────────────────────
+  SUMMARY
+────────────────────────────────────────────────────────────
+          Mean (s) Std (s)  Min (s)  Max (s)
+Version                                     
+Original   14.8464  0.9600  13.5937  16.4938
+Optimized   1.4380  0.6753   0.8294   2.3690
+
+  Speedup: 10.32x
+```
+
+<p align="center">
+<img width="842" height="547" alt="ใช้ Python ทำ proc varclus เหมือนบน SAS ได้แล้วนะ" src="https://github.com/user-attachments/assets/da14eb9b-49c9-4158-bd38-04955803b5ff" />
+</p>
+
 ...Developing...
 
 
