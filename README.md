@@ -365,7 +365,7 @@ For a larger dataset with scaling by **sizing 50,000, 500,000 and 1,000,000 rows
 </p>
 
 # Example (Usage is fully compatible with original version.)
-## See [demo.ipynb]([https://github.com/naenumtou/varclushi_opt/blob/master/notebooks/01_performance_testing.ipynb]) for more details.
+## See [demo.ipynb](https://github.com/naenumtou/varclushi_opt/blob/master/notebooks/01_performance_testing.ipynb) for more details.
 
 ```python
 import pandas as pd
